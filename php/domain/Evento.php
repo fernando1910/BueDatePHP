@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 	require_once("php/helpers/MySQLHelper.php");
 
@@ -336,6 +336,14 @@
 								FROM tb_evento_classificacao WHERE cd_evento = " . $cd_evento .")
 						WHERE cd_evento = " . $cd_evento;
 						
+			$connect->atualizar($query);
+			$connect->desconectar();
+		}
+		
+		function cancelarEvento($cd_evento){
+			$connect = new conexaoBD();
+			$connect->conectar();
+			$query = "UPDATE tb_evento SET fg_cancelado = 1 WHERE cd_evento = " . $cd_evento;
 			$connect->atualizar($query);
 			$connect->desconectar();
 		}
