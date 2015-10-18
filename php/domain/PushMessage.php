@@ -6,21 +6,48 @@
 	class PushMessage{
 		
 	
-		function enviarNotificacao($title,$message, $deviceIds){
+		function enviarNotificacao($title,$message, $registrationIds){
 			$apiKey = 'AIzaSyA6zRqDYctHHthxLbJVpKOrnuZj5VNUlgk';
 			$client = new Client($apiKey);
-			$registrationIds = array(
-'clG3NHiLw9Y:APA91bEDc4QHzj3ErrNQ3cLjuczEyZLKjq0NQLuwIKUNivVLklTvFfdBMInOEKp4OWshZKNyiV2aAfNRoFiPVlvv9qNmVqNe780-TEu46T4RF6QgI13VfKtJvlM0zCFTpV9STgVFmWdF'
-			);
+			
 			
 			$data = array(
 				'title' => $title,
 				'message' => $message,
 			);
 			
-			$client->send($data, $registrationIds);		
+			$options = array(
+                    'collapse_key'=>'comentario',
+                    'delay_while_idle'=>false,
+                    'time_to_live'=>(4 * 7 * 24 * 60 * 60),
+                    'dry_run'=>false
+                );
+			
+			$client->send($data, $registrationIds, $options);		
 			$responses = $client->getResponses();
-			return var_dump($responses); 
+			
+			foreach( $responses as $response ){
+                    $response = json_decode( $response->getContent() );
+
+                    // VERIFICA SE HÁ ALGUM CANONICAL_ID, QUE INDICA QUE AO MENOS UM REGISTRATION_ID DEVE SER ATUALIZADO
+                    if( $response->canonical_ids > 0 || $response->failure > 0 ){
+
+                        // PERCORRE TODOS OS RESULTADOS VERIFICANDO SE HÁ UM REGISTRATION_ID PARA SER ALTERADO
+                        for( $i = 0, $tamI = count( $response->results ); $i < $tamI; $i++ ){
+
+                            if( !empty( $response->results[$i]->canonical_id ) ){
+
+                                // SE HÁ UM NOVO REGISTRATION_ID, ENTÃO ALTERANO BD
+
+                            }
+                            else if( strcasecmp( $response->results[$i]->error, "NotRegistered" ) == 0 ){
+
+                                // DELETE REGISTRO DO BD
+                                //CgdUser::deleteUser( $userArray[$i] );
+                            }
+                        }
+                    }
+                }
 			
 		}
 	

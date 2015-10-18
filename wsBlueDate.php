@@ -2,7 +2,6 @@
 
 	include("php/domain/Usuario.php");
 	include("php/domain/Evento.php");
-	include("php/domain/PushMessage.php");
 	
 	require_once 'vendor/autoload.php';
 	
@@ -210,8 +209,7 @@ use Endroid\Gcm\Client;
 		break;
 	
 		default:
-			$objMensagem = new PushMessage();
-			echo $objMensagem->enviarNotificacao('oi','oi','oi');
+		
 
 			
 		break;

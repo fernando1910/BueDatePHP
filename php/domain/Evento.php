@@ -1,6 +1,8 @@
-﻿<?php
+<?php
 
 	require_once("php/helpers/MySQLHelper.php");
+	require_once("php/domain/Usuario.php");
+	require_once("php/domain/PushMessage.php");
 
 	class Evento {
 		private $cd_evento;
@@ -289,9 +291,32 @@
 		function comentar($cd_evento, $cd_usuario, $ds_comentario)
 		{
 			$connect = new conexaoBD();
+			$objMensagem = new PushMessage();
+
+			
 			$connect->conectar();
 			$query = "insert into tb_evento_comentario (cd_evento,cd_usuario,ds_comentario) values ('".$cd_evento ."','" .$cd_usuario . "' , '".$ds_comentario ."')";
 			$return =  $connect->inserir($query);
+
+			$query = "SELECT ds_token 
+						FROM tb_usuario u 
+						INNER JOIN tb_evento_convidado ec ON ec.cd_usuario = u.cd_usuario
+						WHERE ec.cd_evento =  " . $cd_evento; 
+
+			$ids = array();
+			$result = $connect->pesquisar($query);
+			if (mysqli_num_rows($result) > 0) {
+				while ($row = $result->fetch_assoc())
+				{
+					$ids[] = $row["ds_token"];
+				}
+			}
+			
+			$title = "Há um novo comentário";
+			$message = "Cometário: " .$ds_comentario ;
+			
+			$objMensagem->enviarNotificacao($title, $message, $ids);
+			
 			$connect->desconectar();
 			return $return;
 			
