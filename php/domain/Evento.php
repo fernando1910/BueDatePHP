@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 	require_once("php/helpers/MySQLHelper.php");
 	require_once("php/domain/Usuario.php");
@@ -178,7 +178,7 @@
 			return json_encode($return);
 		}
 		
-		function converterObjetoEvento($jSON)
+		function converterObjetoEvento($evento)
 		{
 			$this->setTituloEvento($evento->ds_titulo_evento);
 			$this->setDescricao($evento->ds_descricao);

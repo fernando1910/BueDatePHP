@@ -166,6 +166,7 @@ use Endroid\Gcm\Client;
 			$evento = json_decode($evento);
 			$cd_evento = $evento->cd_evento;
 			$objEvento = new Evento();
+			$objEvento->converterObjetoEvento($evento);
 			echo $objEvento->atualizarEvento($cd_evento);
 			
 		break;
