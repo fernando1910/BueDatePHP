@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 	include("php/domain/Usuario.php");
 	include("php/domain/Evento.php");
@@ -166,7 +166,6 @@ use Endroid\Gcm\Client;
 			$evento = json_decode($evento);
 			$cd_evento = $evento->cd_evento;
 			$objEvento = new Evento();
-			$objEvento->retornarObjetoEvento($evento);
 			echo $objEvento->atualizarEvento($cd_evento);
 			
 		break;
