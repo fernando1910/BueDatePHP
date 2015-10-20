@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 	include("php/domain/Usuario.php");
 	include("php/domain/Evento.php");

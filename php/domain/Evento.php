@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 	require_once("php/helpers/MySQLHelper.php");
 	require_once("php/domain/Usuario.php");
