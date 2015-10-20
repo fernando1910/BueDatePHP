@@ -315,7 +315,7 @@
 			$title = "Há um novo comentário";
 			$message = "Cometário: " .$ds_comentario ;
 			
-			$objMensagem->enviarNotificacao($title, $message, $ids);
+			$objMensagem->enviarNotificacao($title, $message, $ids, 'comentario');
 			
 			$connect->desconectar();
 			return $return;
@@ -369,8 +369,30 @@
 			$connect = new conexaoBD();
 			$connect->conectar();
 			$query = "UPDATE tb_evento SET fg_cancelado = 1 WHERE cd_evento = " . $cd_evento;
-			$connect->atualizar($query);
+			$return = $connect->atualizar($query);
+			
+			$query = "SELECT ds_token 
+						FROM tb_usuario u 
+						INNER JOIN tb_evento_convidado ec ON ec.cd_usuario = u.cd_usuario
+						WHERE ec.cd_evento =  " . $cd_evento; 
+
+			$ids = array();
+			$result = $connect->pesquisar($query);
+			if (mysqli_num_rows($result) > 0) {
+				while ($row = $result->fetch_assoc())
+				{
+					$ids[] = $row["ds_token"];
+				}
+			}
+			
+			if  (count($ids) > 0){				
+				$title = "Evento cancelado";
+				$message = "Evento cancelado" ;
+				$objMensagem->enviarNotificacao($title, $message, $ids, 'cancelamento');
+			}
+			
 			$connect->desconectar();
+			return $return;
 		}
 	}
 

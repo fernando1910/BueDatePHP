@@ -6,7 +6,7 @@
 	class PushMessage{
 		
 	
-		function enviarNotificacao($title,$message, $registrationIds){
+		function enviarNotificacao($title,$message, $registrationIds, $tipoNotificacao){
 			$apiKey = 'AIzaSyA6zRqDYctHHthxLbJVpKOrnuZj5VNUlgk';
 			$client = new Client($apiKey);
 			
@@ -17,7 +17,7 @@
 			);
 			
 			$options = array(
-                    'collapse_key'=>'comentario',
+                    'collapse_key'=>  $tipoNotificacao,
                     'delay_while_idle'=>false,
                     'time_to_live'=>(4 * 7 * 24 * 60 * 60),
                     'dry_run'=>false

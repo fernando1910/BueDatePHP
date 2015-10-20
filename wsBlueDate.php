@@ -198,6 +198,8 @@ use Endroid\Gcm\Client;
 			$evento = utf8_encode($_POST['json']);
 			$evento = json_decode($evento);
 			$cd_evento = $evento->cd_evento;
+			$objEvento = new Evento();
+			echo $objEvento->cancelarEvento($cd_evento);
 		
 		break;
 		
