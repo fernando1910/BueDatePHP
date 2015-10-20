@@ -246,13 +246,13 @@
 			$connect->conectar();
 			$query =  
 				"UPDATE tb_evento SET
-					ds_titulo_evento = ". $this->getTituloEvento()	.",
-					ds_descricao = " . $this->getDescricao()		.",
-					ds_endereco = ". $this->getEndereco()			.",
-					dt_evento = ". $this->getDataEvento()			.",
-					nr_latitude = ". $this->getLatitude()			.",
-					nr_longitude = ". $this->getLongitude()			.",
-					fg_evento_privado = ". $this->getEventoPrivado()."
+					ds_titulo_evento = '". $this->getTituloEvento()	."',
+					ds_descricao = '" . $this->getDescricao()		."',
+					ds_endereco = '". $this->getEndereco()			."',
+					dt_evento = '". $this->getDataEvento()			."',
+					nr_latitude = '". $this->getLatitude()			."',
+					nr_longitude = '". $this->getLongitude()			."',
+					fg_evento_privado = '". $this->getEventoPrivado()."' 
 				WHERE cd_evento = " .$cd_evento ;
 				
 			$return = $connect->atualizar($query);
