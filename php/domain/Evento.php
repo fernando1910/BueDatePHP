@@ -214,9 +214,49 @@
 			
 			$foto = base64_decode($this->ds_foto_capa);
 		 
-			$query = "insert into tb_evento (ds_titulo_evento, ds_descricao, dt_inclusao, fg_evento_privado, cd_usuario_inclusao , dt_evento, ds_endereco, nr_latitude, nr_longitude) VALUES ('".$this->ds_titulo_evento."', '". $this->ds_descricao ."' ,'". $this->dt_inclusao ."' , '". $this->fg_evento_privado."' , '".$this->cd_usario_inclusao."' , '".$this->dt_evento."' , '". $this->ds_endereco."', '". $this->nr_latitude ."' , '". $this->nr_longitude ."')";
+			$query = "insert into tb_evento 
+						(
+							ds_titulo_evento, 
+							ds_descricao, 
+							dt_inclusao, 
+							fg_evento_privado, 
+							cd_usuario_inclusao , 
+							dt_evento, 
+							ds_endereco, 
+							nr_latitude, 
+							nr_longitude
+						)
+						VALUES 
+						(
+							'".$this->ds_titulo_evento."', 
+							'". $this->ds_descricao ."' ,
+							'". $this->dt_inclusao ."' , 
+							'". $this->fg_evento_privado."' , 
+							'".$this->cd_usario_inclusao."' , 
+							'".$this->dt_evento."' , 
+							'". $this->ds_endereco."', 
+							'". $this->nr_latitude ."' , 
+							'". $this->nr_longitude ."'
+						)";
 			
 			$codigo_evento =  $connect->inserir($query);
+			
+			$query = "INSERT INTO tb_evento_convidado
+						(
+							cd_evento,
+							cd_usuario_inclusao,
+							cd_usuario,
+							fg_partifica
+						) 
+						VALUES 
+						(
+							'".$codigo_evento."',
+							'".$this->cd_usario_inclusao."',
+							'".$this->cd_usario_inclusao."',
+							'1'
+						)";
+						
+			$connect->inserir($query);
 			
 			$file = fopen('capa_evento/'. $codigo_evento . '.png' ,'wb');
 			fwrite($file, $foto);
