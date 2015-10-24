@@ -271,7 +271,21 @@
 		{
 			$connect = new conexaoBD();
 			$connect->conectar();
-			$query =  "SELECT * FROM tb_evento WHERE cd_evento = " .$cd_evento ;
+			$query = "SELECT 
+						 cd_evento,
+						 ds_titulo_evento,
+						 ds_descricao,
+						 nr_latitude,
+						 nr_longitude,
+						 cd_usuario_inclusao,
+						 DATE_FORMAT(dt_evento, '%m/%d/%Y %H:%s') AS dt_evento,
+						 DATE_FORMAT(dt_inclusao, '%m/%d/%Y %H:%s') AS dt_inclusao ,
+						 DATE_FORMAT(dt_alteracao, '%m/%d/%Y %H:%s') AS dt_alteracao ,
+						 fg_evento_privado,
+						 ds_endereco,
+						 ind_classificacao,
+						 fg_cancelado
+						FROM tb_evento WHERE cd_evento = " .$cd_evento ;
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
