@@ -319,7 +319,10 @@
 			$connect = new conexaoBD();
 			$connect->conectar();
 			
-			$query = "SELECT * FROM tb_evento ORDER BY ind_classificacao DESC LIMIT 10 ";
+			$query = "SELECT * FROM tb_evento 
+					WHERE fg_excluido = 0 AND fg_cancelado = 0 
+					ORDER BY ind_classificacao 
+					DESC LIMIT 10 ";
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
