@@ -410,7 +410,7 @@
 			$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
 						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $ind_classificacao . ")";
 						
-			$connect->inserir($query);
+			$return = $connect->inserir($query);
 			
 			$query = "UPDATE tb_evento SET 
 						ind_classificacao = 
@@ -420,6 +420,7 @@
 						
 			$connect->atualizar($query);
 			$connect->desconectar();
+			return $return;
 		}
 		
 		function cancelarEvento($cd_evento){

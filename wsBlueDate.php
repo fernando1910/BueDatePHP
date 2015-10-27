@@ -125,9 +125,11 @@ use Endroid\Gcm\Client;
 		case 'classificarEvento':
 			$dados = utf8_encode($_POST['json']);
 			$dados = json_decode($dados);
-			
+			$cd_usuario = $dados->cd_usuario;
+			$cd_evento = $dados->cd_evento;
+			$ind_classificacao = $dados->ind_classificacao;
 			$objEvento = new Evento();
-		
+			echo $objEvento->classficar($cd_usuario,$cd_evento,$ind_classificacao);
 		
 		break;
 	
