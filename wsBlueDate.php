@@ -209,7 +209,16 @@ use Endroid\Gcm\Client;
 			$objUsuario = new Usuario();
 			echo $objUsuario->atualizarNome($usuario->ds_nome);
 		break;
+		
+		case 'buscarConvites':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados );
+			$codigoUsuario = $dados->codigoUsuario;
+			$data = $dados->data;
+			$objEvento = new Evento();
+			echo $objEvento->buscarConvites($codigoUsuario ,$data);
 	
+		break;
 		default:
 		
 

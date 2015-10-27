@@ -451,6 +451,40 @@
 			$connect->desconectar();
 			return $return;
 		}
+		
+		function buscarConvites($codigoUsuario, $data){
+			$connect = new conexaoBD();
+			$connect->conectar();
+			
+			$query = "SELECT 
+						tb_evento.cd_evento,
+						ds_titulo_evento,
+						ds_descricao,
+						nr_latitude,
+						nr_longitude,
+						tb_evento.cd_usuario_inclusao,
+						DATE_FORMAT(dt_evento, '%m/%d/%Y %H:%s') AS dt_evento,
+						DATE_FORMAT(tb_evento.dt_inclusao, '%m/%d/%Y %H:%s') AS dt_inclusao ,
+						DATE_FORMAT(tb_evento.dt_alteracao, '%m/%d/%Y %H:%s') AS dt_alteracao ,
+						fg_evento_privado,
+						ds_endereco,
+						ind_classificacao,
+						fg_cancelado
+			 		FROM tb_evento 
+					INNER JOIN  tb_evento_convidado ON  tb_evento_convidado.cd_evento = tb_evento.cd_evento 
+					WHERE 
+						fg_participa = 0  
+						AND cd_usuario =  " .  $codigoUsuario . " 
+						AND dt_evento > '" . $data ."'";
+					
+;
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayEvento($result);
+			$connect->desconectar();
+			return 	$return;
+			return $query ;
+				
+		}
 	}
 
 ?>
