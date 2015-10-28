@@ -129,7 +129,7 @@ use Endroid\Gcm\Client;
 			$cd_evento = $dados->cd_evento;
 			$ind_classificacao = $dados->ind_classificacao;
 			$objEvento = new Evento();
-			echo $objEvento->classficar($cd_usuario,$cd_evento,$ind_classificacao);
+			echo $objEvento->classificar($cd_usuario,$cd_evento,$ind_classificacao);
 		
 		break;
 	
@@ -180,20 +180,16 @@ use Endroid\Gcm\Client;
 			
 			$count = count($dados->convidados);
 			$cd_evento = $dados->cd_evento;
-			$usuarios_convidados;
-			$i = 1;
-			
+			$cd_usuario_inclusao = $dados->cd_usuario_inclusao;
+			$ds_nome = $dados->ds_nome;
 			
 			foreach($dados->convidados as $convidado)
 			{
-				$objEvento->convidar($cd_evento,$convidado->cd_usuario);
-				$usuarios_convidados = $convidado->cd_usuario;
-				if ($i < $count)
-				{
-					$usuarios_convidados = $usuarios_convidados. " , ";
-					$i ++;			
-				}
+				$objEvento->convidar($cd_evento,$convidado->cd_usuario, $cd_usuario_inclusao);
 			}
+			
+			echo $objEvento->enviarMensagemConvite($cd_evento, $ds_nome);
+			
 		break;
 		
 		case 'cancelarEvento':

@@ -372,7 +372,7 @@
 			$title = "Há um novo comentário";
 			$message = "Cometário: " .$ds_comentario ;
 			
-			$objMensagem->enviarNotificacao($title, $message, $ids, 'comentario');
+			$objMensagem->enviarNotificacao($title, $message, $ids, 'comentario', null, $return );
 			
 			$connect->desconectar();
 			return $return;
@@ -396,15 +396,16 @@
 			
 		}
 		
-		function convidar($cd_evento, $cd_usuario){
+		function convidar($cd_evento, $cd_usuario, $cd_usuario_inclusao){
 			$connect = new conexaoBD();
 			$connect->conectar();
-			$query = "INSERT INTO tb_evento_convidado (cd_usuario, cd_evento) VALUES (".$cd_usuario." , ". $cd_evento . ")";
+			$query = "INSERT INTO tb_evento_convidado (cd_usuario, cd_evento, cd_usuario_inclusao , fg_notificacao_pendente) 
+						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $cd_usuario_inclusao." , 1)";
 			$connect->inserir($query);
 			$connect->desconectar();
 		}
 		
-		function classficar($cd_usuario, $cd_evento, $ind_classificacao){
+		function classificar($cd_usuario, $cd_evento, $ind_classificacao){
 			$connect = new conexaoBD();
 			$connect->conectar();
 			$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
@@ -425,6 +426,7 @@
 		
 		function cancelarEvento($cd_evento){
 			$connect = new conexaoBD();
+			$objMensagem = new PushMessage();
 			$connect->conectar();
 			$query = "UPDATE tb_evento SET fg_cancelado = 1 WHERE cd_evento = " . $cd_evento;
 			$return = $connect->atualizar($query);
@@ -446,7 +448,7 @@
 			if  (count($ids) > 0){				
 				$title = "Evento cancelado";
 				$message = "Evento cancelado" ;
-				$objMensagem->enviarNotificacao($title, $message, $ids, 'cancelamento');
+				$objMensagem->enviarNotificacao($title, $message, $ids, 'cancelamento', $cd_evento);
 			}
 			
 			$connect->desconectar();
@@ -485,6 +487,48 @@
 			return 	$return;
 			return $query ;
 				
+		}
+		
+		function enviarMensagemConvite($cd_evento, $ds_nome){
+			$connect = new conexaoBD();
+			$objMensagem = new PushMessage();
+			$connect->conectar();
+			
+			$query = "SELECT ds_token 
+						FROM tb_usuario u 
+						INNER JOIN tb_evento_convidado ec ON ec.cd_usuario = u.cd_usuario
+						WHERE ec.cd_evento =  " . $cd_evento .
+						" AND ec.fg_notificacao_pendente = 1 "; 
+
+			$ids = array();
+			$result = $connect->pesquisar($query);
+			if (mysqli_num_rows($result) > 0) {
+				while ($row = $result->fetch_assoc())
+				{
+					$ids[] = $row["ds_token"];
+				}
+			}
+			
+			$query = "SELECT ds_titulo_evento FROM tb_evento WHERE cd_evento =". $cd_evento;
+			$ds_titulo_evento = '';
+			$result = $connect->pesquisar($query);
+			if (mysqli_num_rows($result) > 0) {
+				while ($row = $result->fetch_assoc())
+				{
+					$ds_titulo_evento = $row["ds_titulo_evento"];
+				}
+			}
+			
+			if  (count($ids) > 0){				
+				$title = "Você recebeu um novo convite";
+				$message = $ds_nome. " enviou um convite para você partificar do evento '". $ds_titulo_evento."'" ;
+				$objMensagem->enviarNotificacao($title, $message, $ids, 'convite', $cd_evento);
+			}
+			
+			$query = "UPDATE tb_evento_convidado SET fg_notificacao_pendente = 0 WHERE fg_notificacao_pendente = 1 ";
+			$return = $connect->atualizar($query);
+			$connect->desconectar();
+			return $return;
 		}
 	}
 
