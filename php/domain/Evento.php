@@ -532,7 +532,7 @@
 			return $return;
 		}
 		
-		function participar($cd_evento, $cd_usuario)
+		function participar($cd_evento, $cd_usuario, $ds_nome)
 		{
 			$connect = new conexaoBD();
 			$objMensagem = new PushMessage();
@@ -548,18 +548,31 @@
 				{
 					$cd_usuario_inclusao = $row["cd_usuario_inclusao"];
 				}
-			}
+			}			
 			
 			$query = "UPDATE tb_evento_convidado SET fg_participa = 1 WHERE cd_evento =".$cd_evento." AND cd_usuario=".$cd_usuario ;
-			$return = $connect->atualizar($query);
-			$connect->desconectar();
-			
+			$return = $connect->atualizar($query);		
 			
 			if ($cd_usuario_inclusao != null )
 			{
-				// FALTA IMPLEMENTAR GCM
-			}
+				$title = " Nova notificação";
+				$message = "$ds_nome Aceitou seu convite!";
+				
+				$query = "SELECT ds_token FROM tb_usuario WHERE cd_usuario = $cd_usuario_inclusao"; 
+
+				$ids = array();
+				$result = $connect->pesquisar($query);
+				if (mysqli_num_rows($result) > 0) {
+					while ($row = $result->fetch_assoc())
+					{
+						$ids[] = $row["ds_token"];
+					}
+				}
 			
+				$objMensagem->enviarNotificacao($title, $message, $ids, "confirmacaoConvite", null, null );
+			} 
+			
+			$connect->desconectar();
 			return $return;
 			
 		}

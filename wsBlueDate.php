@@ -223,8 +223,9 @@ use Endroid\Gcm\Client;
 			$dados = json_decode($dados);
 			$cd_usuario = $dados->cd_usuario;
 			$cd_evento = $dados->cd_evento;
-			$objEvento = new Evento();
-			echo $objEvento->participar($cd_evento, $cd_usuario);
+			$ds_nome = $dados->ds_nome;
+			$objEvento = new Evento();			
+			echo $objEvento->participar($cd_evento, $cd_usuario, $ds_nome);
 		
 		break;
 		default:
