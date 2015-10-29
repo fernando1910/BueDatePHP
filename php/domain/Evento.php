@@ -546,11 +546,11 @@
 			if (mysqli_num_rows($result) > 0) {
 				while ($row = $result->fetch_assoc())
 				{
-					$$cd_usuario_inclusao = $row["cd_usuario_inclusao"];
+					$cd_usuario_inclusao = $row["cd_usuario_inclusao"];
 				}
 			}
 			
-			$query = "UPDATE tb_evento_convidado SET fg_partifica = 1 WHERE cd_evento =".$cd_evento." AND cd_usuario=".$cd_usuario ;
+			$query = "UPDATE tb_evento_convidado SET fg_participa = 1 WHERE cd_evento =".$cd_evento." AND cd_usuario=".$cd_usuario ;
 			$return = $connect->atualizar($query);
 			$connect->desconectar();
 			
