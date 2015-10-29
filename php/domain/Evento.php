@@ -358,7 +358,8 @@
 			$query = "SELECT ds_token 
 						FROM tb_usuario u 
 						INNER JOIN tb_evento_convidado ec ON ec.cd_usuario = u.cd_usuario
-						WHERE ec.cd_evento =  " . $cd_evento; 
+						WHERE ec.cd_evento =".$cd_evento. "
+						AND fg_partifica = 1 " ; 
 
 			$ids = array();
 			$result = $connect->pesquisar($query);
@@ -459,7 +460,7 @@
 			$connect = new conexaoBD();
 			$connect->conectar();
 			
-			$query = "SELECT 
+			$query = "SELECT DISTINCT
 						tb_evento.cd_evento,
 						ds_titulo_evento,
 						ds_descricao,
@@ -480,12 +481,12 @@
 						AND cd_usuario =  " .  $codigoUsuario . " 
 						AND dt_evento > '" . $data ."'";
 					
-;
+
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
 			return 	$return;
-			return $query ;
+
 				
 		}
 		
@@ -529,6 +530,38 @@
 			$return = $connect->atualizar($query);
 			$connect->desconectar();
 			return $return;
+		}
+		
+		function participar($cd_evento, $cd_usuario)
+		{
+			$connect = new conexaoBD();
+			$objMensagem = new PushMessage();
+			$connect->conectar();
+			
+			$query = "SELECT cd_usuario_inclusao FROM tb_evento_convidado WHERE cd_evento =  " . $cd_evento .
+						" AND cd_usuario = ". $cd_usuario ; 
+
+			$cd_usuario_inclusao;
+			$result = $connect->pesquisar($query);
+			if (mysqli_num_rows($result) > 0) {
+				while ($row = $result->fetch_assoc())
+				{
+					$$cd_usuario_inclusao = $row["cd_usuario_inclusao"];
+				}
+			}
+			
+			$query = "UPDATE tb_evento_convidado SET fg_partifica = 1 WHERE cd_evento =".$cd_evento." AND cd_usuario=".$cd_usuario ;
+			$return = $connect->atualizar($query);
+			$connect->desconectar();
+			
+			
+			if ($cd_usuario_inclusao != null )
+			{
+				// FALTA IMPLEMENTAR GCM
+			}
+			
+			return $return;
+			
 		}
 	}
 

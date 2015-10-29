@@ -217,6 +217,16 @@ use Endroid\Gcm\Client;
 			echo $objEvento->buscarConvites($codigoUsuario ,$data);
 	
 		break;
+		
+		case 'participar':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$cd_usuario = $dados->cd_usuario;
+			$cd_evento = $dados->cd_evento;
+			$objEvento = new Evento();
+			echo $objEvento->participar($cd_evento, $cd_usuario);
+		
+		break;
 		default:
 		
 
