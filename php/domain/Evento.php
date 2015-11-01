@@ -169,6 +169,7 @@
 					$row_array["ds_endereco"] = $row["ds_endereco"];					
 					$row_array["nr_latitude"] = $row["nr_latitude"];
 					$row_array["nr_longitude"] = $row["nr_longitude"];
+					$row_array["fg_participa"] = $row["fg_participa"];
 					
 					array_push($return,$row_array);
 				}	
@@ -271,20 +272,23 @@
 			$connect = new conexaoBD();
 			$connect->conectar();
 			$query = "SELECT 
-						 cd_evento,
-						 ds_titulo_evento,
-						 ds_descricao,
-						 nr_latitude,
-						 nr_longitude,
-						 cd_usuario_inclusao,
-						 DATE_FORMAT(dt_evento, '%m/%d/%Y %H:%s') AS dt_evento,
-						 DATE_FORMAT(dt_inclusao, '%m/%d/%Y %H:%s') AS dt_inclusao ,
-						 DATE_FORMAT(dt_alteracao, '%m/%d/%Y %H:%s') AS dt_alteracao ,
-						 fg_evento_privado,
-						 ds_endereco,
-						 ind_classificacao,
-						 fg_cancelado
-						FROM tb_evento WHERE cd_evento = " .$cd_evento ;
+						 e.cd_evento,
+						 e.ds_titulo_evento,
+						 e.ds_descricao,
+						 e.nr_latitude,
+						 e.nr_longitude,
+						 e.cd_usuario_inclusao,
+						 DATE_FORMAT(e.dt_evento, '%m/%d/%Y %H:%s') AS dt_evento,
+						 DATE_FORMAT(e.dt_inclusao, '%m/%d/%Y %H:%s') AS dt_inclusao ,
+						 DATE_FORMAT(e.dt_alteracao, '%m/%d/%Y %H:%s') AS dt_alteracao ,
+						 e.fg_evento_privado,
+						 e.ds_endereco,
+						 e.ind_classificacao,
+						 e.fg_cancelado,
+						 ec.fg_participa
+						FROM tb_evento e
+						INNER JOIN tb_evento_convidado ec on e.cd_evento = ec.cd_evento
+						WHERE e.cd_evento = " .$cd_evento ;
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
