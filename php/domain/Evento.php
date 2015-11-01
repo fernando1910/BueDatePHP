@@ -585,7 +585,7 @@
 							e.cd_evento,
 							e.ds_titulo_evento,
 							e.ds_descricao,
-							e.cd_usario_inclusao,
+							e.cd_usuario_inclusao,
 							e.dt_evento,
 							e.fg_evento_privado,
 							e.ds_endereco, 
