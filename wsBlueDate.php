@@ -116,10 +116,10 @@ use Endroid\Gcm\Client;
 			
 				
 		case 'buscarEventosProximos':
-			$local = utf8_encode($_POST['json']);
-			$local = json_decode($local);
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
 			$objEvento = new Evento();
-			echo $objEvento->buscarEventosProximos($local->nr_latitude, $local->nr_longitude);
+			echo $objEvento->buscarEventosProximos($dados->nr_latitude, $dados->nr_longitude, $dados->nr_distancia);
 		break;
 		
 		case 'classificarEvento':

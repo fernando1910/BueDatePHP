@@ -333,14 +333,30 @@
 			
 		}
 		
-		function buscarEventosProximos($nr_latitude,$nr_longitude)
-		{				
-			$query = "SELECT cd_evento, ds_titulo_evento, ds_endereco, ROUND((((acos(sin((".$nr_latitude."*pi()/180)) * sin((`nr_latitude`*pi()/180))+cos((".$nr_latitude."*pi()/180)) * cos((`nr_latitude`*pi()/180)) * cos(((".$nr_longitude." - `nr_longitude`)*pi()/180))))*180/pi())*60*1.1515),2)	 AS `distance` FROM tb_evento loc HAVING distance < 10";
+		function buscarEventosProximos($nr_latitude,$nr_longitude, $nr_distancia)
+		{			
+			$connect = new conexaoBD();	
+			$connect->conectar();
+
+			$query = "SELECT cd_evento,
+						 ds_titulo_evento,
+						 ds_descricao,
+						 nr_latitude,
+						 nr_longitude,
+						 cd_usuario_inclusao,
+						 DATE_FORMAT(dt_evento, '%m/%d/%Y %H:%s') AS dt_evento,
+						 DATE_FORMAT(dt_inclusao, '%m/%d/%Y %H:%s') AS dt_inclusao ,
+						 DATE_FORMAT(dt_alteracao, '%m/%d/%Y %H:%s') AS dt_alteracao ,
+						 fg_evento_privado,
+						 ds_endereco,
+						 ind_classificacao,
+						 fg_cancelado, ROUND((((acos(sin((".$nr_latitude."*pi()/180)) * sin((`nr_latitude`*pi()/180))+cos((".$nr_latitude."*pi()/180)) * cos((`nr_latitude`*pi()/180)) * cos(((".$nr_longitude." - `nr_longitude`)*pi()/180))))*180/pi())*60*1.1515),2)	 AS `distance` FROM tb_evento  
+						 WHERE fg_cancelado = 0
+						 HAVING distance < $nr_distancia";
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
-			return 	$return;
-						
+			return $return;
 
 		}
 		
