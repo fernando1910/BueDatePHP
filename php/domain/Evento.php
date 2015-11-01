@@ -166,8 +166,7 @@
 					$row_array["cd_usario_inclusao"] = $row["cd_usario_inclusao"];
 					$row_array["dt_evento"] = $row["dt_evento"];
 					$row_array["fg_evento_privado"] = $row["fg_evento_privado"];
-					$row_array["ds_endereco"] = $row["ds_endereco"];
-					$row_array["cd_usuario_inclusao"] = $row["cd_usuario_inclusao"];
+					$row_array["ds_endereco"] = $row["ds_endereco"];					
 					$row_array["nr_latitude"] = $row["nr_latitude"];
 					$row_array["nr_longitude"] = $row["nr_longitude"];
 					
@@ -575,6 +574,32 @@
 			$connect->desconectar();
 			return $return;
 			
+		}
+		
+		function selecionarTodosEventos($cd_usuario)
+		{
+			$connect = new conexaoBD();			
+			$connect->conectar();
+			
+			$query = "SELECT DISTINCT 
+							e.cd_evento,
+							e.ds_titulo_evento,
+							e.ds_descricao,
+							e.cd_usario_inclusao,
+							e.dt_evento,
+							e.fg_evento_privado,
+							e.ds_endereco, 
+							e.nr_latitude,
+							e.nr_longitude							
+						FROM tb_evento e
+						INNER JOIN tb_evento_convidado ec on ec.cd_evento = e.cd_evento	
+						WHERE e.fg_cancelado = 0 
+						AND ec.fg_participa = 1
+						AND ec.cd_usuario = $cd_usuario";			
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayEvento($result);
+			$connect->desconectar();
+			return $return;
 		}
 	}
 
