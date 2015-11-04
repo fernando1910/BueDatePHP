@@ -113,8 +113,18 @@ use Endroid\Gcm\Client;
 			$resultado = $objEvento->selecionarTopFestas();
 			echo $resultado;
 		break;
+		
+		
+		case 'selecionarTopConvidados':
+			$objEvento = new Evento();
+			echo $objEvento->selecionarTopConvidados();
+		break;
 			
-				
+		case 'selecionarTopComentarios':
+			$objEvento = new Evento();
+			echo $objEvento->selecionarTopComentarios();
+		break;
+			
 		case 'buscarEventosProximos':
 			$dados = utf8_encode($_POST['json']);
 			$dados = json_decode($dados);

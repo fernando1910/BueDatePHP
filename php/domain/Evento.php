@@ -333,6 +333,40 @@
 	
 		}
 		
+		function selecionarTopConvidados()
+		{
+			$connect = new conexaoBD();
+			$connect->conectar();
+			
+			$query = "SELECT e.*, COUNT(ev.cd_evento) FROM tb_evento e
+						INNER JOIN tb_evento_convidado ev ON e.cd_evento = ev.cd_evento
+						WHERE fg_cancelado = 0 
+						ORDER BY COUNT(ev.cd_evento) DESC
+						LIMIT 10 ";
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayEvento($result);
+			$connect->desconectar();
+			return 	$return;
+	
+		}
+		
+		function selecionarTopComentarios()
+		{
+			$connect = new conexaoBD();
+			$connect->conectar();
+			
+			$query = "SELECT e.*, COUNT(ec.cd_evento) FROM tb_evento e
+						INNER JOIN tb_evento_comentario ec ON e.cd_evento = ec.cd_evento
+						WHERE fg_cancelado = 0 
+						ORDER BY COUNT(ec.cd_evento) DESC
+						LIMIT 10";
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayEvento($result);
+			$connect->desconectar();
+			return 	$return;
+	
+		}
+		
 		function buscarNovidades($cd_usuario){
 			
 		}
