@@ -470,9 +470,9 @@
 					  WHERE cd_evento = $cd_evento
 					  AND cd_usuario = $cd_usuario";
 					  
-			$existe = $connect->pesquisar($query);
+			$result = $connect->pesquisar($query);
 			
-			if($existe != 1)
+			if(mysqli_num_rows($result) > 0)
 			{
 				$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
 						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $ind_classificacao . ")";
