@@ -472,21 +472,23 @@
 					  
 			$existe = $connect->pesquisar($query);
 			
-			if($existe != 1)
+			if($existe == 1)
 			{
-				$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
-						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $ind_classificacao . ")";
-				
-				$return = $connect->inserir($query);						
-			}
-			else{
-				
 				$query = "UPDATE tb_evento_classificacao 
 						  SET ind_classificacao = $ind_classificacao
 						  WHERE cd_evento = $cd_evento
 						  AND cd_usuario = $cd_usuario";						
 				
 				$return = $connect->atualizar($query);	
+							
+			}
+			else{
+				
+				$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
+						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $ind_classificacao . ")";
+				
+				$return = $connect->inserir($query);			
+				
 			}			
 			
 			$query = "UPDATE tb_evento SET 
