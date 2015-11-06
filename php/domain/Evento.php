@@ -471,8 +471,12 @@
 					  AND cd_usuario = $cd_usuario";
 					  
 			$result = $connect->pesquisar($query);
+<<<<<<< HEAD
 			
 			if (mysqli_num_rows($result) > 0) 
+=======
+			if(mysqli_num_rows($result) > 0)
+>>>>>>> origin/master
 			{
 				$query = "UPDATE tb_evento_classificacao 
 						  SET ind_classificacao = $ind_classificacao
@@ -480,16 +484,25 @@
 						  AND cd_usuario = $cd_usuario";						
 				
 				$return = $connect->atualizar($query);	
+<<<<<<< HEAD
 							
 			}else{
+=======
+			}
+			else{
+>>>>>>> origin/master
 				
 				$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
 						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $ind_classificacao . ")";
 				
 				$return = $connect->inserir($query);			
 			}			
+<<<<<<< HEAD
 			
 			/*$query = "UPDATE tb_evento SET 
+=======
+			$query = "UPDATE tb_evento SET 
+>>>>>>> origin/master
 						ind_classificacao = 
 							(SELECT IFNULL(AVG(tb_evento_classificacao.ind_classificacao),0) 
 								FROM tb_evento_classificacao WHERE cd_evento = " . $cd_evento .")
