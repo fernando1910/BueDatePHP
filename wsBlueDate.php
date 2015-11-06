@@ -239,6 +239,15 @@ use Endroid\Gcm\Client;
 		
 		break;
 		
+		case 'selecionarEventosPorData':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$cd_usuario = $dados->cd_usuario;
+			$dt_event0 = $dados->dt_evento;
+			$objEvento = new Evento();			
+			echo $objEvento->selecionarEventosPorData($dt_evento, $cd_usuario);
+			
+		
 		case 'selecionarTodosEventos':
 			$dados = utf8_encode($_POST['json']);
 			$dados = json_decode($dados);

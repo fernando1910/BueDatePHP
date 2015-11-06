@@ -677,6 +677,34 @@
 			$connect->desconectar();
 			return $return;
 		}
+		
+		function selecionarEventosPorData($dt_evento, $cd_usuario)
+		{
+			$connect = new conexaoBD();			
+			$connect->conectar();
+			
+			$query = "SELECT DISTINCT 
+							e.cd_evento,
+							e.ds_titulo_evento,
+							e.ds_descricao,
+							e.cd_usuario_inclusao,
+							e.dt_evento,
+							e.fg_evento_privado,
+							e.ds_endereco, 
+							e.nr_latitude,
+							e.nr_longitude							
+						FROM tb_evento e
+						INNER JOIN tb_evento_convidado ec on ec.cd_evento = e.cd_evento	
+						WHERE e.fg_cancelado = 0 
+						AND ec.fg_participa = 1
+						AND ec.cd_usuario = $cd_usuario
+						AND e.dt_evento =  $dt_evento";			
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayEvento($result);
+			$connect->desconectar();
+			return $return;
+			
+		}
 	}
 
 ?>
