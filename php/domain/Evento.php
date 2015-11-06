@@ -170,6 +170,7 @@
 					$row_array["nr_latitude"] = $row["nr_latitude"];
 					$row_array["nr_longitude"] = $row["nr_longitude"];
 					$row_array["fg_participa"] = $row["fg_participa"];
+					$row_array["ind_classificacao"] = $row["ind_classificacao"];
 					
 					array_push($return,$row_array);
 				}	
@@ -285,9 +286,11 @@
 						 e.ds_endereco,
 						 e.ind_classificacao,
 						 e.fg_cancelado,
-						 ec.fg_participa
+						 ec.fg_participa,
+						 IFNULL(ecl.ind_classificacao,0)
 						FROM tb_evento e
 						INNER JOIN tb_evento_convidado ec on e.cd_evento = ec.cd_evento
+						LEFT JOIN tb_evento_classificacao ecl on ecl.cd_evento = e.cd_evento
 						WHERE e.cd_evento = " .$cd_evento ;
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
@@ -462,10 +465,29 @@
 		function classificar($cd_usuario, $cd_evento, $ind_classificacao){
 			$connect = new conexaoBD();
 			$connect->conectar();
-			$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
+			
+			$query = "SELECT 1 FROM tb_evento_classificacao 
+					  WHERE cd_evento = $cd_evento
+					  AND cd_usuario = $cd_usuario";
+					  
+			$existe = $connect->pesquisar($query);
+			
+			if($existe != 1)
+			{
+				$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
 						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $ind_classificacao . ")";
-						
-			$return = $connect->inserir($query);
+				
+				$return = $connect->inserir($query);						
+			}
+			else{
+				
+				$query = "UPDATE tb_evento_classificacao 
+						  SET ind_classificacao = $ind_classificacao
+						  WHERE cd_evento = $cd_evento
+						  AND cd_usuario = $cd_usuario";						
+				
+				$return = $connect->atualizar($query);	
+			}			
 			
 			$query = "UPDATE tb_evento SET 
 						ind_classificacao = 
