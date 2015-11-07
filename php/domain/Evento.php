@@ -247,7 +247,7 @@
 							cd_evento,
 							cd_usuario_inclusao,
 							cd_usuario,
-							fg_partifica
+							fg_participa
 						) 
 						VALUES 
 						(
