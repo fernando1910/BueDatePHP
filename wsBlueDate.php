@@ -246,7 +246,6 @@ use Endroid\Gcm\Client;
 			$cd_usuario = $dados->cd_usuario;
 			$objEvento = new Evento();			
 			echo $objEvento->selecionarEventosPorData($dt_evento, $cd_usuario);
-			echo $dt_evento;
 		break;
 		
 		case 'selecionarTodosEventos':
