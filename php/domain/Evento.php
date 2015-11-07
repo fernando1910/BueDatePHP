@@ -638,8 +638,26 @@
 				}
 			}			
 			
-			$query = "UPDATE tb_evento_convidado SET fg_participa = 1 WHERE cd_evento =".$cd_evento." AND cd_usuario=".$cd_usuario ;
-			$return = $connect->atualizar($query);		
+			$query ="SELECT 1 FROM tb_evento e 
+					INNER JOIN tb_evento_convidado ec on e.cd_evento = ec.cd_evento
+					WHERE ec.fg_publico = 1
+					AND cd_evento = $cd_evento
+					AND cd_usuario = $cd_usuario";	
+					
+			$result = $connect->pesquisar($query);			
+			if (mysqli_num_rows($result) > 0) {
+
+				$query = "UPDATE tb_evento_convidado SET fg_participa = 1 
+						WHERE cd_evento = $cd_evento  
+						AND cd_usuario= $cd_usuario";
+				$return = $connect->atualizar($query);					
+			}
+			else{
+							
+				$query = "INSERT INTO tb_evento_convidado (cd_usuario, cd_evento, fg_participa)
+						  VALUES ($cd_usuario,$cd_evento,1)"
+				$return = $connect->inserir($query);	
+			}			
 			
 			if ($cd_usuario_inclusao != null )
 			{
