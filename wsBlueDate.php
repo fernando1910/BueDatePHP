@@ -47,66 +47,16 @@ use Endroid\Gcm\Client;
 			$evento = utf8_encode($_POST['json']);
 			$evento = json_decode($evento);
 			$cd_evento = $evento->cd_evento;
-			if ($cd_evento != null)
-			{
-				$objEvento = new Evento();
-				echo $objEvento->selecionarEvento($cd_evento);
-			}
-			else
-			{
-				echo 'Não foi informado o código do evento';
-			}
-			
+			$objEvento = new Evento();
+			echo $objEvento->selecionarEvento($cd_evento);
 		break;
 			
-		
-	
 		case 'atualizarContatos':
-			$host = "mysql.hostinger.com.br";
-			$bd = "u670967363_fiest";
-			$user = "u670967363_sa";
-			$senha = "13204658";
-			
-		
 			$contatos = utf8_encode($_POST['json']);
 			$contatos = json_decode($contatos);
-			$count = count($contatos->numeros);
-			$return = array();
+			$objContatos = new Contatos();
+			echo $objContatos->atualizarContatos($contatos);
 			
-		
-			$connect = mysqli_connect($host,$user,$senha,$bd);
-		
-			if (mysqli_connect_errno())
-			{
-			  echo "Failed to connect to MySQL: " . mysqli_connect_error();
-			 }
-			 $aux;
-			 $i = 1;
-			foreach($contatos->numeros as $numero)
-			{
-				$aux = $aux . "'" . $numero->nr_telefone . "'";
-				if ($i < $count)
-				{
-					$aux = $aux . " OR ds_telefone RLIKE  ";
-					$i ++;			
-				}
-		
-			}
-			
-			$query = "SELECT DISTINCT * FROM tb_usuario WHERE  fg_ativo = 1 AND ( ds_telefone  RLIKE  ". $aux . " )  ";
-			$result = mysqli_query($connect,$query);
-			
-			if (mysqli_num_rows($result) > 0) {
-					while ($row = $result->fetch_assoc())
-					{
-						$row_array["cd_usuario_contato"] =  $row["cd_usuario"];
-						$row_array["ds_nome"] =  $row["ds_nome"];
-						array_push($return,$row_array);
-					}
-			
-			}
-			echo(json_encode($return));
-			mysqli_close($connect);
 		break;
 	
 		case 'selecionarTopFestas':

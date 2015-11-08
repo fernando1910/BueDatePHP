@@ -52,6 +52,34 @@
 			$connect->desconectar();
 			return $return;
 		}
+		
+		function atualizarContatos($contatos)
+		{
+			$connect = new conexaoBD();
+			$connect->conectar();
+			
+			$count = count($contatos->numeros);
+			$return = array();
+			
+			$aux;
+			$i = 1;
+			foreach($contatos->numeros as $numero)
+			{
+				$aux = $aux . "'" . $numero->nr_telefone . "'";
+				if ($i < $count)
+				{
+					$aux = $aux . " OR ds_telefone RLIKE  ";
+					$i ++;			
+				}
+		
+			}
+			
+			$query = "SELECT DISTINCT * FROM tb_usuario WHERE  fg_ativo = 1 AND ( ds_telefone  RLIKE  ". $aux . " )  ";
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayContatos($result);
+			$connect->desconectar();
+			return $return;
+		}
 	}
 	
 ?>
