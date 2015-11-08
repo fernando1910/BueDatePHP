@@ -2,6 +2,7 @@
 
 	include("php/domain/Usuario.php");
 	include("php/domain/Evento.php");
+	include("php/domain/Contatos.php");
 	
 	require_once 'vendor/autoload.php';
 	
@@ -256,6 +257,15 @@ use Endroid\Gcm\Client;
 			echo $objEvento->selecionarTodosEventos($cd_usuario);
 			
 		break;
+		
+		case 'buscarConvidados':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$cd_evento = $dados->cd_evento;
+			$objContatos = new Contatos();
+			echo $objContatos->buscarConvidados($cd_evento);
+		break;
+		
 		default:
 		
 
