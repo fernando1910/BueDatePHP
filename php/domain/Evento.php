@@ -171,6 +171,11 @@
 					$row_array["nr_longitude"] = $row["nr_longitude"];
 					$row_array["fg_participa"] = $row["fg_participa"];
 					$row_array["ind_classificacao"] = $row["ind_classificacao"];
+					if (!is_null($row["nr_convidados"]))
+						$row_array["nr_convidados"]  = $row["nr_convidados"]; 
+					if (!is_null($row["nr_comentarios"]))
+						$row_array["nr_comentarios"]  = $row["nr_comentarios"]; 
+
 					
 					array_push($return,$row_array);
 				}	
@@ -527,24 +532,25 @@
 			$connect->conectar();
 			
 			$query = "SELECT DISTINCT
-						tb_evento.cd_evento,
-						ds_titulo_evento,
-						ds_descricao,
-						nr_latitude,
-						nr_longitude,
-						tb_evento.cd_usuario_inclusao,
-						DATE_FORMAT(dt_evento, '%d/%m/%Y %H:%s') AS dt_evento,
-						DATE_FORMAT(tb_evento.dt_inclusao, '%d/%m/%Y %H:%s') AS dt_inclusao ,
-						DATE_FORMAT(tb_evento.dt_alteracao, '%d/%m/%Y %H:%s') AS dt_alteracao ,
-						fg_evento_privado,
-						ds_endereco,
-						ind_classificacao,
-						fg_cancelado
-			 		FROM tb_evento 
-					INNER JOIN  tb_evento_convidado ON  tb_evento_convidado.cd_evento = tb_evento.cd_evento 
+						e.cd_evento,
+						e.ds_titulo_evento,
+						e.ds_descricao,
+						e.nr_latitude,
+						e.nr_longitude,
+						e.cd_usuario_inclusao,
+						DATE_FORMAT(e.dt_evento, '%d/%m/%Y %H:%s') AS dt_evento,
+						DATE_FORMAT(e.dt_inclusao, '%d/%m/%Y %H:%s') AS dt_inclusao ,
+						DATE_FORMAT(e.dt_alteracao, '%d/%m/%Y %H:%s') AS dt_alteracao ,
+						e.fg_evento_privado,
+						e.ds_endereco,
+						e.ind_classificacao,
+						e.fg_cancelado,
+						IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_comentario WHERE cd_evento = e.cd_evento), 0) AS nr_comentarios,
+						IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_convidado WHERE cd_evento = e.cd_evento), 0) AS nr_convidados
+			 		FROM tb_evento e
+					INNER JOIN  tb_evento_convidado ec ON  ec.cd_evento = e.cd_evento  AND ec.cd_usuario =  " .  $codigoUsuario . " 
 					WHERE 
 						fg_participa = 0  
-						AND cd_usuario =  " .  $codigoUsuario . " 
 						AND dt_evento > '" . $data ."'";
 					
 
