@@ -47,8 +47,9 @@ use Endroid\Gcm\Client;
 			$evento = utf8_encode($_POST['json']);
 			$evento = json_decode($evento);
 			$cd_evento = $evento->cd_evento;
+			$cd_usuario = $evento->cd_usuario;
 			$objEvento = new Evento();
-			echo $objEvento->selecionarEvento($cd_evento);
+			echo $objEvento->selecionarEvento($cd_evento, $cd_usuario);
 		break;
 			
 		case 'atualizarContatos':

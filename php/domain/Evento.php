@@ -268,7 +268,7 @@
 			
 		}
 		
-		function selecionarEvento($cd_evento)
+		function selecionarEvento($cd_evento, $cd_usuario)
 		{
 			$connect = new conexaoBD();
 			$connect->conectar();
@@ -284,20 +284,17 @@
 						 DATE_FORMAT(e.dt_alteracao, '%d/%m/%Y %H:%s') AS dt_alteracao ,
 						 e.fg_evento_privado,
 						 e.ds_endereco,
-						 e.ind_classificacao,
 						 e.fg_cancelado,
-						 ec.fg_participa,
-						 IFNULL(ecl.ind_classificacao,0)
+						 IFNULL(ec.fg_participa, 0) AS fg_participa,
+						 IFNULL(ecl.ind_classificacao,0) AS ind_classificacao
 						FROM tb_evento e
-						INNER JOIN tb_evento_convidado ec on e.cd_evento = ec.cd_evento
-						LEFT JOIN tb_evento_classificacao ecl on ecl.cd_evento = e.cd_evento
-						WHERE e.cd_evento = " .$cd_evento ;
+						LEFT JOIN tb_evento_convidado ec on e.cd_evento = ec.cd_evento AND ec.cd_usuario = $cd_usuario
+						LEFT JOIN tb_evento_classificacao ecl on ecl.cd_evento = e.cd_evento AND ecl.cd_usuario = $cd_usuario 
+						WHERE e.cd_evento = $cd_evento ";
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
-			
 			return $return;
-
 		}
 		
 		function atualizarEvento($cd_evento)
