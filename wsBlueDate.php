@@ -204,7 +204,7 @@ use Endroid\Gcm\Client;
 			$dados = utf8_encode($_POST['json']);
 			$dados = json_decode($dados);
 			$cd_usuario = $dados->cd_usuario;
-			$objEvento = new Evento();			
+			$objEvento = new Evento();	
 			echo $objEvento->selecionarTodosEventos($cd_usuario);
 			
 		break;
@@ -215,6 +215,15 @@ use Endroid\Gcm\Client;
 			$cd_evento = $dados->cd_evento;
 			$objContatos = new Contatos();
 			echo $objContatos->buscarConvidados($cd_evento);
+		break;
+		
+		case 'selecionarMeusEventos':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$cd_usuario = $dados->cd_usuario;
+			$dt_evento = $dados->dt_evento;
+			$objEvento = new Evento();
+			echo $objEvento->selecionarMeusEventos($cd_usuario,$dt_evento);
 		break;
 		
 		default:

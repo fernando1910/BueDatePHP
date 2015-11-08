@@ -252,14 +252,16 @@
 							cd_evento,
 							cd_usuario_inclusao,
 							cd_usuario,
-							fg_participa
+							fg_participa,
+							fg_notificacao_pendente
 						) 
 						VALUES 
 						(
 							'".$codigo_evento."',
 							'".$this->cd_usario_inclusao."',
 							'".$this->cd_usario_inclusao."',
-							'1'
+							'1',
+							'0'
 						)";
 						
 			$connect->inserir($query);
@@ -458,9 +460,14 @@
 		function convidar($cd_evento, $cd_usuario, $cd_usuario_inclusao){
 			$connect = new conexaoBD();
 			$connect->conectar();
-			$query = "INSERT INTO tb_evento_convidado (cd_usuario, cd_evento, cd_usuario_inclusao , fg_notificacao_pendente) 
+			$query = "SELECT 1 FROM tb_evento_convidado WHERE cd_evento = $cd_evento AND cd_usuario = $cd_usuario";
+			$result = $connect->pesquisar($query);
+			if(mysqli_num_rows($result) < 1)
+			{
+				$query = "INSERT INTO tb_evento_convidado (cd_usuario, cd_evento, cd_usuario_inclusao , fg_notificacao_pendente) 
 						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $cd_usuario_inclusao." , 1)";
-			$connect->inserir($query);
+				$connect->inserir($query);
+			}
 			$connect->desconectar();
 		}
 		
@@ -724,6 +731,35 @@
 			$connect->desconectar();
 			return $return;
 			
+		}
+		
+		function selecionarMeusEventos($cd_usuario, $dt_evento)
+		{
+			$connect = new conexaoBD();			
+			$connect->conectar();
+			$query = "SELECT DISTINCT 
+							cd_evento,
+							ds_titulo_evento,
+							ds_descricao,
+							nr_latitude,
+							nr_longitude,
+							cd_usuario_inclusao,
+							DATE_FORMAT(dt_evento, '%d/%m/%Y %H:%s') AS dt_evento,
+							DATE_FORMAT(dt_inclusao, '%d/%m/%Y %H:%s') AS dt_inclusao ,
+							DATE_FORMAT(dt_alteracao, '%d/%m/%Y %H:%s') AS dt_alteracao ,
+							fg_evento_privado,
+							ds_endereco,
+							ind_classificacao,
+							fg_cancelado,
+							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_comentario WHERE cd_evento = cd_evento), 0) AS nr_comentarios,
+							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_convidado WHERE cd_evento = cd_evento), 0) AS nr_convidados
+						FROM tb_evento 
+						WHERE cd_usuario_inclusao = $cd_usuario AND DATE(dt_evento) > '$dt_evento' ";
+						
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayEvento($result);
+			$connect->desconectar();
+			return $return;
 		}
 	}
 
