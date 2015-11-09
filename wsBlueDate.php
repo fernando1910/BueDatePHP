@@ -31,7 +31,7 @@ use Endroid\Gcm\Client;
 			
 			$objEvento->setTituloEvento($evento->ds_titulo_evento);
 			$objEvento->setDescricao($evento->ds_descricao);
-			$objEvento->setCodigoUsarioInclusao($evento->cd_usario_inclusao);
+			$objEvento->setCodigoUsuarioInclusao($evento->cd_usuario_inclusao);
 			$objEvento->setDataEvento($evento->dt_evento);
 			$objEvento->setEventoPrivado($evento->fg_evento_privado);
 			$objEvento->setEndereco($evento->ds_endereco);
@@ -39,6 +39,7 @@ use Endroid\Gcm\Client;
 			$objEvento->setLongitude($evento->nr_longitude);
 			$objEvento->setFotoCapa($evento->ds_foto_capa);
 			$objEvento->setNomeArquivoFoto($evento->ds_nome_arquivo_foto);
+			$objEvento->setDataInclusao($evento->dt_inclusao);
 			echo ($objEvento->inserirEvento());
 			
 		break;

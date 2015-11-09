@@ -8,7 +8,7 @@
 		private $cd_evento;
         private $ds_titulo_evento;
         private $ds_descricao;
-        private $cd_usario_inclusao;
+        private $cd_usuario_inclusao;
         private $dt_evento;
         private $dt_inclusao;
         private $dt_alteracao;
@@ -48,12 +48,12 @@
             $this->ds_descricao = $ds_descricao;
         }
 
-        public function getCodigoUsarioInclusao() {
-            return $this->cd_usario_inclusao;
+        public function getCodigoUsuarioInclusao() {
+            return $this->cd_usuario_inclusao;
         }
 
-        public function setCodigoUsarioInclusao($cd_usario_inclusao) {
-            $this->cd_usario_inclusao = $cd_usario_inclusao;
+        public function setCodigoUsuarioInclusao($cd_usuario_inclusao) {
+            $this->cd_usuario_inclusao = $cd_usuario_inclusao;
         }
 
         public function getDataEvento() {
@@ -163,7 +163,7 @@
 					$row_array["cd_evento"] = $row["cd_evento"];
 					$row_array["ds_titulo_evento"] = $row["ds_titulo_evento"];
 					$row_array["ds_descricao"] = $row["ds_descricao"];
-					$row_array["cd_usario_inclusao"] = $row["cd_usario_inclusao"];
+					$row_array["cd_usuario_inclusao"] = $row["cd_usuario_inclusao"];
 					$row_array["dt_evento"] = $row["dt_evento"];
 					$row_array["fg_evento_privado"] = $row["fg_evento_privado"];
 					$row_array["ds_endereco"] = $row["ds_endereco"];					
@@ -188,7 +188,7 @@
 		{
 			$this->setTituloEvento($evento->ds_titulo_evento);
 			$this->setDescricao($evento->ds_descricao);
-			$this->setCodigoUsarioInclusao($evento->cd_usario_inclusao);
+			$this->setCodigoUsuarioInclusao($evento->cd_usuario_inclusao);
 			$this->setDataEvento($evento->dt_evento);
 			$this->setEventoPrivado($evento->fg_evento_privado);
 			$this->setEndereco($evento->ds_endereco);
@@ -196,6 +196,7 @@
 			$this->setLongitude($evento->nr_longitude);
 			$this->setFotoCapa($evento->ds_foto_capa);
 			$this->setNomeArquivoFoto($evento->ds_nome_arquivo_foto);
+			$this->setDataAlteracao($evento->dt_alteracao);
 		}
 		
 		function retonarArrayComentarios($result){
@@ -226,7 +227,7 @@
 							ds_descricao, 
 							dt_inclusao, 
 							fg_evento_privado, 
-							cd_usuario_inclusao , 
+							cd_usuario_inclusao, 
 							dt_evento, 
 							ds_endereco, 
 							nr_latitude, 
@@ -238,7 +239,7 @@
 							'". $this->ds_descricao ."' ,
 							'". $this->dt_inclusao ."' , 
 							'". $this->fg_evento_privado."' , 
-							'".$this->cd_usario_inclusao."' , 
+							'".$this->cd_usuario_inclusao."' , 
 							'".$this->dt_evento."' , 
 							'". $this->ds_endereco."', 
 							'". $this->nr_latitude ."' , 
@@ -258,8 +259,8 @@
 						VALUES 
 						(
 							'".$codigo_evento."',
-							'".$this->cd_usario_inclusao."',
-							'".$this->cd_usario_inclusao."',
+							'".$this->cd_usuario_inclusao."',
+							'".$this->cd_usuario_inclusao."',
 							'1',
 							'0'
 						)";
@@ -316,7 +317,8 @@
 					dt_evento = '". $this->getDataEvento()			."',
 					nr_latitude = '". $this->getLatitude()			."',
 					nr_longitude = '". $this->getLongitude()			."',
-					fg_evento_privado = '". $this->getEventoPrivado()."' 
+					fg_evento_privado = '". $this->getEventoPrivado()."' ,
+					dt_alteracao = '". $this->getDataAlteracao()."' 
 				WHERE cd_evento = " .$cd_evento ;
 				
 			$return = $connect->atualizar($query);
