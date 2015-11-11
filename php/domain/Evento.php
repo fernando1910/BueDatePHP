@@ -305,7 +305,7 @@
 			return $return;
 		}
 		
-		function atualizarEvento($cd_evento)
+		function atualizarEvento($cd_evento, $ds_mensagem = null)
 		{
 			$connect = new conexaoBD();
 			$connect->conectar();
@@ -322,6 +322,31 @@
 				WHERE cd_evento = " .$cd_evento ;
 				
 			$return = $connect->atualizar($query);
+			
+			if ($ds_mensagem != null)
+			{			
+				$query = "SELECT DISTINCT ds_token FROM tb_evento_convidado ec
+							INNER JOIN tb_usuario u on ec.cd_usuario = u.cd_usuario
+							WHERE cd_evento = $cd_evento";
+	
+				$ids = array();
+				$result = $connect->pesquisar($query);
+				if (mysqli_num_rows($result) > 0) {
+					while ($row = $result->fetch_assoc())
+					{
+						$ids[] = $row["ds_token"];
+					}
+				}
+				
+				
+				if  (count($ids) > 0){				
+					$title = "Houve uma alteração no evento";
+					$message = $ds_mensagem;
+					$objMensagem->enviarNotificacao($title, $message, $ids, 'convite', $cd_evento);
+				}
+			}
+			
+			
 			$connect->desconectar();
 			return $return;
 		}

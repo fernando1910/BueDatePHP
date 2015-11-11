@@ -130,6 +130,7 @@ use Endroid\Gcm\Client;
 			$evento = utf8_encode($_POST['json']);
 			$evento = json_decode($evento);
 			$cd_evento = $evento->cd_evento;
+			$ds_mensagem = $evento->ds_mensagem;
 			$objEvento = new Evento();
 			$objEvento->converterObjetoEvento($evento);
 			echo $objEvento->atualizarEvento($cd_evento);
