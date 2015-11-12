@@ -182,6 +182,15 @@ class Usuario {
 		
 	}
 	
+	function atualizarTelefoneVisivel($fg_telefone_visivel, $cd_usuario){
+		$connect = new conexaoBD();
+		$connect->conectar();
+		$query = "UPDATE tb_usuario SET fg_telefone_visivel = '$fg_telefone_visivel' WHERE cd_usuario = $cd_usuario";
+		$return =  $connect->atualizar($query);
+		$connect->desconectar();
+		return $return ;
+	}
+	
 	
 }
 ?>

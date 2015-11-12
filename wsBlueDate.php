@@ -219,6 +219,16 @@ use Endroid\Gcm\Client;
 			echo $objContatos->buscarConvidados($cd_evento);
 		break;
 		
+		case 'atualizarTelefoneVisivel':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$fg_telefone_visivel = $dados->fg_telefone_visivel;
+			$cd_usuario = $dados->cd_usuario;
+			$objUsuario = new Usuario();
+			echo $objUsuario->atualizarTelefoneVisivel($fg_telefone_visivel, $cd_usuario);
+			
+		break;
+		
 		case 'selecionarMeusEventos':
 			$dados = utf8_encode($_POST['json']);
 			$dados = json_decode($dados);
