@@ -657,7 +657,7 @@
 				}
 			}			
 			
-			$query ="SELECT 1 FROM tb_evento e 
+			$query ="SELECT cd_evento FROM tb_evento e 
 					INNER JOIN tb_evento_convidado ec on e.cd_evento = ec.cd_evento
 					WHERE ec.fg_publico = 1
 					AND cd_evento = $cd_evento
@@ -669,13 +669,13 @@
 				$query = "UPDATE tb_evento_convidado SET fg_participa = 1 
 						WHERE cd_evento = $cd_evento  
 						AND cd_usuario= $cd_usuario";
-				$return = $connect->atualizar($query);					
+				//$return = $connect->atualizar($query);					
 			}
 			else{
 							
-				$query = "INSERT INTO tb_evento_convidado (cd_usuario, cd_evento, fg_participa)
-						  VALUES ($cd_usuario,$cd_evento,1)";
-				$return = $connect->inserir($query);	
+				$query = "INSERT INTO tb_evento_convidado (cd_evento, cd_usuario, fg_participa)
+						  VALUES ($cd_evento,$cd_usuario,1)";
+				//$return = $connect->inserir($query);	
 			}			
 			
 			if ($cd_usuario_inclusao != null )
@@ -698,7 +698,7 @@
 			} 
 			
 			$connect->desconectar();
-			return $return;
+			return $query;
 			
 		}
 		
