@@ -360,7 +360,7 @@
 			$query = "SELECT * FROM tb_evento 
 					WHERE fg_cancelado = 0 
 					ORDER BY ind_classificacao 
-					DESC LIMIT 10 ";
+					DESC ";
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
