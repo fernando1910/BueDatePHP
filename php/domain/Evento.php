@@ -342,6 +342,7 @@
 				if  (count($ids) > 0){				
 					$title = "Houve uma alteração no evento";
 					$message = $ds_mensagem;
+					$objMensagem = new PushMessage();
 					$objMensagem->enviarNotificacao($title, $message, $ids, 'convite', $cd_evento);
 				}
 			}

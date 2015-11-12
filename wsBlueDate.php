@@ -133,7 +133,7 @@ use Endroid\Gcm\Client;
 			$ds_mensagem = $evento->ds_mensagem;
 			$objEvento = new Evento();
 			$objEvento->converterObjetoEvento($evento);
-			echo $objEvento->atualizarEvento($cd_evento);
+			echo $objEvento->atualizarEvento($cd_evento, $ds_mensagem);
 			
 		break;
 		
