@@ -798,6 +798,30 @@
 			$connect->desconectar();
 			return $return;
 		}
+		
+		function carregarComentario($cd_comentario){
+			$connect = new conexaoBD();			
+			$connect->conectar();
+			$query = "SELECT ds_comentario, ds_nome, c.dt_inclusao FROM tb_evento_comentario c
+						INNER JOIN tb_usuario u ON c.cd_usuario = c.cd_usuario
+						WHERE cd_comentario = $cd_comentario";
+						
+			$result = $connect->pesquisar($query);
+			
+			$return = array();
+			if (mysqli_num_rows($result) > 0) {
+				while ($row = $result->fetch_assoc())
+				{
+					$row_array["ds_comentario"] = $row["ds_comentario"];
+					$row_array["ds_nome"] = $row["ds_nome"];
+					$row_array["dt_inclusao"] = $row["dt_inclusao"];
+					array_push($return,$row_array);
+				}	
+			}
+			
+			return json_encode($return);
+			
+		}
 	}
 
 ?>

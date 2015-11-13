@@ -238,6 +238,14 @@ use Endroid\Gcm\Client;
 			echo $objEvento->selecionarMeusEventos($cd_usuario,$dt_evento);
 		break;
 		
+		case 'carregarComentario':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$cd_comentario = $dados->cd_comentario;
+			$objEvento = new Evento();
+			echo $objEvento->carregarComentario($cd_comentario);
+		break;
+		
 		default:
 		
 
