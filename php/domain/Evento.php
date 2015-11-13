@@ -358,9 +358,10 @@
 			$connect->conectar();
 			
 			$query = "SELECT * FROM tb_evento 
-					WHERE fg_cancelado = 0 
-					ORDER BY ind_classificacao 
-					DESC ";
+					  WHERE fg_cancelado = 0 AND Date(dt_evento) 
+					  BETWEEN Date(Date_Sub(now(),Interval 1 MONTH)) 
+					  AND Date(now())
+					  ORDER BY ind_classificacao DESC";
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
