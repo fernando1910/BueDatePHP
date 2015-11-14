@@ -170,7 +170,8 @@
 					$row_array["nr_latitude"] = $row["nr_latitude"];
 					$row_array["nr_longitude"] = $row["nr_longitude"];
 					$row_array["fg_participa"] = $row["fg_participa"];
-					$row_array["ind_classificacao"] = $row["ind_classificacao"];
+					if (!is_null($row["ind_classificacao"]))
+						$row_array["ind_classificacao"] = $row["ind_classificacao"];
 					if (!is_null($row["nr_convidados"]))
 						$row_array["nr_convidados"]  = $row["nr_convidados"]; 
 					if (!is_null($row["nr_comentarios"]))
