@@ -358,7 +358,21 @@
 			$connect = new conexaoBD();
 			$connect->conectar();
 			
-			$query = "SELECT * FROM tb_evento 
+			$query = "SELECT 
+						cd_evento,
+						ds_titulo_evento,
+						ds_descricao,
+						nr_latitude,
+						nr_longitude,
+						cd_usuario_inclusao,
+						DATE_FORMAT(dt_evento, '%d/%m/%Y %H:%s') AS dt_evento,
+						DATE_FORMAT(dt_inclusao, '%d/%m/%Y %H:%s') AS dt_inclusao ,
+						DATE_FORMAT(dt_alteracao, '%d/%m/%Y %H:%s') AS dt_alteracao ,
+						fg_evento_privado,
+						ds_endereco,
+						fg_cancelado, 
+						(select avg(ind_classificacao) from tb_evento_classificacao where cd_evento = tb_evento.cd_evento) as ind_classificacao
+						FROM tb_evento 
 					  WHERE fg_cancelado = 0 AND Date(dt_evento) 
 					  BETWEEN Date(Date_Sub(now(),Interval 1 MONTH)) 
 					  AND Date(now())
