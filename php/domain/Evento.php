@@ -742,7 +742,9 @@
 						INNER JOIN tb_evento_convidado ec on ec.cd_evento = e.cd_evento	
 						WHERE e.fg_cancelado = 0 
 						AND ec.fg_participa = 1
-						AND ec.cd_usuario = $cd_usuario";			
+						AND ec.cd_usuario = $cd_usuario
+						AND ec.cd_usuario_inclusao != $cd_usuario
+						AND DATE(e.dt_evento) = DATE(NOW())";			
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
