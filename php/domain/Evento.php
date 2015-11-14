@@ -819,7 +819,7 @@
 			$connect = new conexaoBD();			
 			$connect->conectar();
 			$query = "SELECT ds_comentario, ds_nome, c.dt_inclusao FROM tb_evento_comentario c
-						INNER JOIN tb_usuario u ON c.cd_usuario = c.cd_usuario
+						INNER JOIN tb_usuario u ON c.cd_usuario = u.cd_usuario
 						WHERE cd_comentario = $cd_comentario";
 						
 			$result = $connect->pesquisar($query);
