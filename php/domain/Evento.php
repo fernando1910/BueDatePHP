@@ -505,13 +505,12 @@
 			$connect = new conexaoBD();
 			$connect->conectar();
 			
-			$query = "SELECT 1 FROM tb_evento_classificacao 
+			$query = "SELECT cd_evento FROM tb_evento_classificacao 
 					  WHERE cd_evento = $cd_evento
 					  AND cd_usuario = $cd_usuario";
 					  
 			$result = $connect->pesquisar($query);
 			if(mysqli_num_rows($result) > 0)
-
 			{
 				$query = "UPDATE tb_evento_classificacao 
 						  SET ind_classificacao = $ind_classificacao
@@ -522,15 +521,12 @@
 			}
 			else{
 
-				
 				$query = "INSERT INTO tb_evento_classificacao (cd_usuario, cd_evento,  ind_classificacao) 
-						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $ind_classificacao . ")";
-				
+						VALUES (".$cd_usuario." , ". $cd_evento . " , ". $ind_classificacao . ")";				
 				$return = $connect->inserir($query);			
-			}			
-			$connect->atualizar($query);
+			}
 			$connect->desconectar();
-			return $query;
+			return $return;
 		}
 		
 		function cancelarEvento($cd_evento){
