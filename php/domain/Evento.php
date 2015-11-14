@@ -205,6 +205,7 @@
 			if (mysqli_num_rows($result) > 0) {
 				while ($row = $result->fetch_assoc())
 				{
+					$row_array["cd_comentario"] = $row["cd_comentario"];
 					$row_array["ds_nome"] = $row["ds_nome"];
 					$row_array["ds_comentario"] = $row["ds_comentario"];
 					array_push($return,$row_array);
@@ -489,6 +490,7 @@
 			$connect = new conexaoBD();
 			$connect->conectar();
 			$query = "SELECT 
+						cd_comentario,
 						ds_nome,
 						ds_comentario 
 					FROM tb_evento_comentario ec INNER JOIN tb_usuario u ON u.cd_usuario = ec.cd_usuario
