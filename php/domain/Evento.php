@@ -508,7 +508,7 @@
 			$title = "Há um novo comentário";
 			$message = "Cometário: " .$ds_comentario ;
 			
-			$objMensagem->enviarNotificacao($title, $message, $ids, 'comentario', null, $return );
+			$objMensagem->enviarNotificacao($title, $message, $ids, 'comentario', $cd_evento);
 			
 			$connect->desconectar();
 			return $return;
@@ -733,7 +733,7 @@
 			
 			if ($cd_usuario_inclusao != null )
 			{
-				$title = " Nova notificação";
+				$title = "Confirmação de convite";
 				$message = "$ds_nome Aceitou seu convite!";
 				
 				$query = "SELECT ds_token FROM tb_usuario WHERE cd_usuario = $cd_usuario_inclusao"; 
@@ -747,7 +747,7 @@
 					}
 				}
 			
-				$objMensagem->enviarNotificacao($title, $message, $ids, "confirmacaoConvite", null, null );
+				$objMensagem->enviarNotificacao($title, $message, $ids, "confirmacaoConvite", $cd_evento);
 			} 
 			
 			$connect->desconectar();
