@@ -837,7 +837,7 @@
 							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_comentario WHERE cd_evento = cd_evento), 0) AS nr_comentarios,
 							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_convidado WHERE cd_evento = cd_evento), 0) AS nr_convidados
 						FROM tb_evento 
-						WHERE cd_usuario_inclusao = $cd_usuario AND DATE(dt_evento) > '$dt_evento' ";
+						WHERE cd_usuario_inclusao = $cd_usuario AND DATE(dt_evento) >= '$dt_evento' ";
 						
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
