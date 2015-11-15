@@ -345,7 +345,7 @@
 					$title = "Houve uma alteração no evento";
 					$message = $ds_mensagem;
 					$objMensagem = new PushMessage();
-					$objMensagem->enviarNotificacao($title, $message, $ids, 'convite', $cd_evento);
+					$objMensagem->enviarNotificacao($title, $message, $ids, 'atualizacaoEvento', $cd_evento);
 				}
 			}
 			
