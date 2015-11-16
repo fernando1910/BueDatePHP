@@ -256,15 +256,15 @@
 							cd_usuario_inclusao,
 							cd_usuario,
 							fg_participa,
-							fg_notificacao_pendente
+							fg_notificacao_pendente 
 						) 
 						VALUES 
 						(
-							'".$codigo_evento."',
-							'".$this->cd_usuario_inclusao."',
-							'".$this->cd_usuario_inclusao."',
-							'1',
-							'0'
+							".$codigo_evento.",
+							".$this->cd_usuario_inclusao.",
+							".$this->cd_usuario_inclusao.",
+							1,
+							0
 						)";
 						
 			$connect->inserir($query);
