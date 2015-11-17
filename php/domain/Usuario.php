@@ -172,10 +172,10 @@ class Usuario {
 		return $return ;
 	}
 	
-	public function atualizarNome($ds_nome){
+	public function atualizarNome($ds_nome, $cd_usuario){
 		$connect = new conexaoBD();
 		$connect->conectar();
-		$query = "UPDATE tb_usuario SET ds_nome = '". $ds_nome .  "' WHERE cd_usuario = " . $this->cd_usuario;
+		$query = "UPDATE tb_usuario SET ds_nome = '$ds_nome' WHERE cd_usuario = $cd_usuario";
 		$return =  $connect->atualizar($query);
 		$connect->desconectar();
 		return $return ;
@@ -191,6 +191,23 @@ class Usuario {
 		return $return ;
 	}
 	
+	function atualizarFotoPerfil ($ds_foto_perfil, $cd_usuario){
+		$return = 1;
+		try{
+			$fileName = "foto_perfil/$cd_usuario.png";
+			if (file_exists($fileName))
+				unlink($fileName);
+			$foto = base64_decode($ds_foto_perfil);
+			$file = fopen('foto_perfil/'. $cd_usuario . '.png' ,'wb');
+			fwrite($file, $foto);
+			fclose($file);
+		}
+		catch(Exception $e){
+			$return = 0;
+		}
+		
+		return $return;
+	}
 	
 }
 ?>

@@ -169,7 +169,7 @@ use Endroid\Gcm\Client;
 			$usuario = utf8_encode($_POST['json']);
 			$usuario = json_decode($usuario);
 			$objUsuario = new Usuario();
-			echo $objUsuario->atualizarNome($usuario->ds_nome);
+			echo $objUsuario->atualizarNome($usuario->ds_nome, $usuario->cd_usuario);
 		break;
 		
 		case 'buscarConvites':
@@ -244,6 +244,14 @@ use Endroid\Gcm\Client;
 			$cd_comentario = $dados->cd_comentario;
 			$objEvento = new Evento();
 			echo $objEvento->carregarComentario($cd_comentario);
+		break;
+		
+		case 'atualizarFotoPerfil':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$objUsuario = new Usuario();
+			echo $objUsuario->atualizarFotoPerfil($dados->ds_foto_perfil, $dados->cd_usuario);
+			
 		break;
 		
 		default:
