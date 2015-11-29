@@ -403,7 +403,7 @@
 						fg_evento_privado,
 						ds_endereco,
 						fg_cancelado, 
-						(select count(cd_evento) from tb_evento_convidado where cd_evento = tb_evento.cd_evento) as nr_convidados
+						(select count(cd_evento) from tb_evento_convidado where cd_evento = tb_evento.cd_evento ) as nr_convidados
 						FROM tb_evento 
 					WHERE fg_cancelado = 0 AND Date(dt_evento) 
 					BETWEEN Date(Date_Sub(now(),Interval 1 MONTH)) 
@@ -435,7 +435,7 @@
 						fg_evento_privado,
 						ds_endereco,
 						fg_cancelado, 
-						(select count(cd_evento) from tb_evento_comentario where cd_evento = tb_evento.cd_evento) as nr_comentarios
+						(select count(cd_evento) from tb_evento_comentario where cd_evento = tb_evento.cd_evento ) as nr_comentarios
 						FROM tb_evento 
 					WHERE fg_cancelado = 0 AND Date(dt_evento) 
 					BETWEEN Date(Date_Sub(now(),Interval 1 MONTH)) 
@@ -470,7 +470,20 @@
 						 fg_evento_privado,
 						 ds_endereco,
 						 ind_classificacao,
-						 fg_cancelado, ROUND((((acos(sin((".$nr_latitude."*pi()/180)) * sin((`nr_latitude`*pi()/180))+cos((".$nr_latitude."*pi()/180)) * cos((`nr_latitude`*pi()/180)) * cos(((".$nr_longitude." - `nr_longitude`)*pi()/180))))*180/pi())*60*1.1515),2)	 AS `distance` FROM tb_evento  
+						 fg_cancelado, 
+						 (
+							6371 *
+							acos(
+								cos( radians( $nr_latitude ) ) *
+								cos( radians( `nr_latitude` ) ) *
+								cos(
+									radians( `nr_longitude` ) - radians( $nr_longitude )
+								) +
+								sin(radians($nr_latitude)) *
+								sin(radians(`nr_latitude`))
+							)
+						) as `distance`
+						 FROM tb_evento  
 						 WHERE fg_cancelado = 0
 						 HAVING distance < $nr_distancia";
 			$result = $connect->pesquisar($query);
@@ -625,7 +638,7 @@
 						e.ind_classificacao,
 						e.fg_cancelado,
 						IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_comentario WHERE cd_evento = e.cd_evento), 0) AS nr_comentarios,
-						IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_convidado WHERE cd_evento = e.cd_evento), 0) AS nr_convidados
+						IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_convidado WHERE cd_evento = e.cd_evento ), 0) AS nr_convidados
 			 		FROM tb_evento e
 					INNER JOIN  tb_evento_convidado ec ON  ec.cd_evento = e.cd_evento  AND ec.cd_usuario =  " .  $codigoUsuario . " 
 					WHERE 
@@ -834,8 +847,8 @@
 							ds_endereco,
 							ind_classificacao,
 							fg_cancelado,
-							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_comentario WHERE cd_evento = cd_evento), 0) AS nr_comentarios,
-							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_convidado WHERE cd_evento = cd_evento), 0) AS nr_convidados
+							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_comentario WHERE cd_evento = tb_evento.cd_evento), 0) AS nr_comentarios,
+							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_convidado WHERE cd_evento = tb_evento.cd_evento), 0) AS nr_convidados
 						FROM tb_evento 
 						WHERE cd_usuario_inclusao = $cd_usuario AND DATE(dt_evento) >= '$dt_evento' ";
 						
