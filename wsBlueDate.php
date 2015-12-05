@@ -254,6 +254,23 @@ use Endroid\Gcm\Client;
 			
 		break;
 		
+		case 'buscarAlterecoes':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$objEvento = new Evento();
+			echo $objEvento->buscarAlterecoes($dados->cd_usuario);
+			
+		break;
+		
+		
+		case 'buscarNovosComentario':
+			$dados = utf8_encode($_POST['json']);
+			$dados = json_decode($dados);
+			$objEvento = new Evento();
+			echo $objEvento->buscarNovosComentario($dados->cd_usuario);
+			
+		break;
+		
 		default:
 		
 

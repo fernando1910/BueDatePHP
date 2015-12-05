@@ -881,6 +881,72 @@
 			return json_encode($return);
 			
 		}
+		
+		function buscarAlterecoes($cd_usuario){
+			$connect = new conexaoBD();			
+			$connect->conectar();
+			$query = "SELECT DISTINCT 
+							e.cd_evento,
+							ds_titulo_evento,
+							ds_descricao,
+							nr_latitude,
+							nr_longitude,
+							e.cd_usuario_inclusao,
+							DATE_FORMAT(dt_evento, '%d/%m/%Y %H:%s') AS dt_evento,
+							DATE_FORMAT(e.dt_inclusao, '%d/%m/%Y %H:%s') AS dt_inclusao ,
+							DATE_FORMAT(e.dt_alteracao, '%d/%m/%Y %H:%s') AS dt_alteracao ,
+							fg_evento_privado,
+							ds_endereco,
+							ind_classificacao,
+							fg_cancelado,
+							IFNULL((SELECT COUNT(cd_evento) 
+										FROM tb_evento_comentario WHERE cd_evento = e.cd_evento), 0) AS nr_comentarios,
+							IFNULL((SELECT COUNT(cd_evento) 
+										FROM tb_evento_convidado WHERE cd_evento = e.cd_evento), 0) AS nr_convidados
+						FROM tb_evento e
+						INNER JOIN tb_evento_convidado ec ON ec.cd_evento = e.cd_evento AND ec.cd_usuario = $cd_usuario 
+						WHERE 
+							DATE(dt_evento) >= DATE(NOW())
+							AND e.dt_alteracao IS NOT NULL";
+						
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayEvento($result);
+			$connect->desconectar();
+			return $return;
+		}
+		
+		function buscarNovosComentario($cd_usuario){
+			$connect = new conexaoBD();			
+			$connect->conectar();
+			$query = "SELECT DISTINCT 
+							e.cd_evento,
+							ds_titulo_evento,
+							ds_descricao,
+							nr_latitude,
+							nr_longitude,
+							e.cd_usuario_inclusao,
+							DATE_FORMAT(dt_evento, '%d/%m/%Y %H:%s') AS dt_evento,
+							DATE_FORMAT(e.dt_inclusao, '%d/%m/%Y %H:%s') AS dt_inclusao ,
+							DATE_FORMAT(e.dt_alteracao, '%d/%m/%Y %H:%s') AS dt_alteracao ,
+							fg_evento_privado,
+							ds_endereco,
+							ind_classificacao,
+							fg_cancelado,
+							IFNULL((SELECT COUNT(cd_evento) 
+										FROM tb_evento_comentario WHERE cd_evento = e.cd_evento), 0) AS nr_comentarios,
+							IFNULL((SELECT COUNT(cd_evento) 
+										FROM tb_evento_convidado WHERE cd_evento = e.cd_evento), 0) AS nr_convidados
+						FROM tb_evento e
+						INNER JOIN tb_evento_convidado ec ON ec.cd_evento = e.cd_evento AND ec.cd_usuario = $cd_usuario 
+						WHERE 
+							DATE(dt_evento) >= DATE(NOW())
+							HAVING  nr_comentarios > 0";
+						
+			$result = $connect->pesquisar($query);
+			$return = $this->retornarArrayEvento($result);
+			$connect->desconectar();
+			return $return;
+		}
 	}
 
 ?>
