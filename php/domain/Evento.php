@@ -329,7 +329,8 @@
 			{			
 				$query = "SELECT DISTINCT ds_token FROM tb_evento_convidado ec
 							INNER JOIN tb_usuario u on ec.cd_usuario = u.cd_usuario
-							WHERE cd_evento = $cd_evento";
+							WHERE cd_evento = $cd_evento 
+							AND ec.cd_usuario <> ec.cd_usuario_inclusao";
 	
 				$ids = array();
 				$result = $connect->pesquisar($query);
