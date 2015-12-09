@@ -508,7 +508,7 @@
 						FROM tb_usuario u 
 						INNER JOIN tb_evento_convidado ec ON ec.cd_usuario = u.cd_usuario
 						WHERE ec.cd_evento =".$cd_evento. "
-						AND fg_partifica = 1 " ; 
+						AND fg_participa = 1 " ; 
 
 			$ids = array();
 			$result = $connect->pesquisar($query);
@@ -519,7 +519,7 @@
 				}
 			}
 			
-			$title = "Há um novo comentário";
+			$title = "Há um novo comentário em um evento que você esta participando";
 			$message = "Cometário: " .$ds_comentario ;
 			
 			$objMensagem->enviarNotificacao($title, $message, $ids, 'comentario', $cd_evento);
@@ -687,7 +687,7 @@
 			
 			if  (count($ids) > 0){				
 				$title = "Você recebeu um novo convite";
-				$message = $ds_nome. " enviou um convite para você partificar do evento '". $ds_titulo_evento."'" ;
+				$message = $ds_nome. " enviou um convite para você participar do evento '". $ds_titulo_evento."'" ;
 				$objMensagem->enviarNotificacao($title, $message, $ids, 'convite', $cd_evento);
 			}
 			
@@ -715,11 +715,8 @@
 				}
 			}			
 			
-			$query ="SELECT e.cd_evento FROM tb_evento e 
-					INNER JOIN tb_evento_convidado ec on e.cd_evento = ec.cd_evento
-					WHERE e.fg_evento_privado = 1
-					AND e.cd_evento = $cd_evento
-					AND ec.cd_usuario = $cd_usuario";	
+			$query ="SELECT cd_evento FROM tb_evento_convidado 
+					WHERE cd_evento = $cd_evento AND cd_usuario = $cd_usuario";	
 					
 			$result = $connect->pesquisar($query);			
 			if (mysqli_num_rows($result) > 0) {
@@ -783,14 +780,16 @@
 							e.fg_evento_privado,
 							e.ds_endereco, 
 							e.nr_latitude,
-							e.nr_longitude							
+							e.nr_longitude,
+							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_comentario WHERE cd_evento = e.cd_evento), 0) AS nr_comentarios,
+							IFNULL((SELECT COUNT(cd_evento) FROM tb_evento_convidado WHERE cd_evento = e.cd_evento), 0) AS nr_convidados						
 						FROM tb_evento e
 						INNER JOIN tb_evento_convidado ec on ec.cd_evento = e.cd_evento	
 						WHERE e.fg_cancelado = 0 
 						AND ec.fg_participa = 1
 						AND ec.cd_usuario = $cd_usuario
 						AND ec.cd_usuario_inclusao != $cd_usuario
-						AND DATE(e.dt_evento) = DATE(NOW())";			
+						AND DATE(e.dt_evento) >= DATE(NOW())";			
 			$result = $connect->pesquisar($query);
 			$return = $this->retornarArrayEvento($result);
 			$connect->desconectar();
